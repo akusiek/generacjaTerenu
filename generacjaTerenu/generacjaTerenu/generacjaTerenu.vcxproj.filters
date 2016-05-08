@@ -21,9 +21,15 @@
     <ClCompile Include="Okno.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OknoOpenGL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Okno.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OknoOpenGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

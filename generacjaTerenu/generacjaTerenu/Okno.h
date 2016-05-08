@@ -1,7 +1,8 @@
 #pragma once
 #include<windows.h>
-class Okno;
-static Okno * okno = NULL;
+class OknoOpenGL;
+static OknoOpenGL * okno = NULL;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 class Okno
@@ -14,9 +15,6 @@ public:
 	~Okno();
 	Okno()
 	{
-		if (okno == NULL)
-		{
-			okno = new Okno();
-		}
+
 	}
 };
