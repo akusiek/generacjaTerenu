@@ -8,6 +8,4 @@ public:
 	LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	bool rejestrujOkno(HINSTANCE hInstance, POINT polozenie, POINT rozmiar, WNDPROC wndProc);
 	WPARAM run();
-
 };
-
