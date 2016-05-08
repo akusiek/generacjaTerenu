@@ -8,6 +8,6 @@ class OknoOpenGL :
 	HDC dcHandle;
 public:
 	OknoOpenGL();
-	~OknoOpenGL();
 };
+static OknoOpenGL okno;
 
