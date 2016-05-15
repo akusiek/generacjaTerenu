@@ -26,7 +26,7 @@ bool Okno::rejestrujOkno(HINSTANCE hInstance, POINT polozenie, POINT rozmiar, WN
 	// WYPE£NIANIE STRUKTURY
 	WNDCLASSEX wc;
 
-	LPSTR nazwaOkna = "Klasa Okienka";
+	LPSTR nazwaOkna = "Klasa okna";
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
     wc.lpfnWndProc = wndProc;
@@ -51,12 +51,12 @@ bool Okno::rejestrujOkno(HINSTANCE hInstance, POINT polozenie, POINT rozmiar, WN
     // TWORZENIE OKNA
     HWND hwnd;
    
-    hwnd = CreateWindowEx( WS_EX_CLIENTEDGE, nazwaOkna, "Oto okienko", WS_OVERLAPPEDWINDOW,
+    hwnd = CreateWindowEx( WS_EX_CLIENTEDGE, nazwaOkna, "Generacja terenu", WS_OVERLAPPEDWINDOW,
     polozenie.x, polozenie.y, rozmiar.x, rozmiar.y, NULL, NULL, hInstance, NULL );
    
     if( hwnd == NULL )
     {
-        MessageBox( NULL, "Okno odmówi³o przyjœcia na œwiat!", "Niestety...", MB_ICONEXCLAMATION );
+        MessageBox( NULL, "Jakiœ problem!", "Niestety...", MB_ICONEXCLAMATION );
 		return false;
     }
    
