@@ -119,11 +119,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Drawer.cpp" />
     <ClCompile Include="Okno.cpp" />
     <ClCompile Include="OknoOpenGL.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Drawer.h" />
     <ClInclude Include="Okno.h" />
     <ClInclude Include="OknoOpenGL.h" />
   </ItemGroup>
