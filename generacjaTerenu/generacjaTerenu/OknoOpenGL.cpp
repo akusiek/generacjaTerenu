@@ -1,9 +1,8 @@
 #include "OknoOpenGL.h"
 
 
-OknoOpenGL::OknoOpenGL():Okno(), rcHandle(NULL), dcHandle(NULL)
+OknoOpenGL::OknoOpenGL():Okno(), rcHandle(NULL), dcHandle(NULL), drawer(&dcHandle)
 {
-
 }
 
 bool OknoOpenGL::setPixelFormat(HDC handle)
@@ -28,6 +27,18 @@ bool OknoOpenGL::setPixelFormat(HDC handle)
 	return true;
 }
 
+void OknoOpenGL::createScene()
+{
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	float ratio = (float) height / (float)width;
+	glFrustum(-0.1, 0.1, ratio*-0.1, ratio*0.1, 0.3, 100);
+	glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_DEPTH_TEST);
+
+}
+
 LRESULT OknoOpenGL::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	long tmp = Okno::WndProc(hWnd, message, wParam, lParam);
@@ -37,7 +48,17 @@ LRESULT OknoOpenGL::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			case WM_CREATE:
 			{
 				initWGL(hWnd);
+				createScene();
 				break;
+			}
+			case WM_SIZE:
+			{
+				createScene();
+				break;
+			}
+			case WM_PAINT:
+			{
+				drawer.draw();
 			}
 			case WM_DESTROY:
 			{

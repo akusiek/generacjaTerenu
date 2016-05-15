@@ -3,6 +3,7 @@
 
 class Okno
 {
+protected:
 	long height, width;
 public:
 	LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
