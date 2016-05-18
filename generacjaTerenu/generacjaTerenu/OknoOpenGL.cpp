@@ -36,7 +36,8 @@ void OknoOpenGL::createScene()
 	glFrustum(-0.1, 0.1, ratio*-0.1, ratio*0.1, 0.3, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
-
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 LRESULT OknoOpenGL::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
