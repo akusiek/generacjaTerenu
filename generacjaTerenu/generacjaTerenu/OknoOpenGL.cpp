@@ -44,12 +44,15 @@ LRESULT OknoOpenGL::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
 	long tmp = Okno::WndProc(hWnd, message, wParam, lParam);
 
-		switch (message)
+	#define TIMER_ANIMACJI 1
+	
+	switch (message)
 		{
 			case WM_CREATE:
 			{
 				initWGL(hWnd);
 				createScene();
+				animTimer = new Timer(&hWnd, TIMER_ANIMACJI, 50);
 				break;
 			}
 			case WM_SIZE:
@@ -60,9 +63,17 @@ LRESULT OknoOpenGL::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			case WM_PAINT:
 			{
 				drawer.draw();
+				break;
+			}
+			case WM_TIMER:
+			{
+				drawer.draw();
+				animTimer->nextFrame();
+				break;
 			}
 			case WM_DESTROY:
 			{
+				delete animTimer;
 				deinitWGL(hWnd);
 				break;
 			}

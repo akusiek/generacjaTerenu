@@ -123,11 +123,13 @@
     <ClCompile Include="Okno.cpp" />
     <ClCompile Include="OknoOpenGL.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="Okno.h" />
     <ClInclude Include="OknoOpenGL.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
