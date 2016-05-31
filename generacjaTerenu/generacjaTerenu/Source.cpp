@@ -1,5 +1,6 @@
-#include"OknoOpenGL.h"
-
+#include "OknoOpenGL.h"
+#include "GLUTWindow.h"
+/*
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	return window.WndProc(hWnd, message, wParam, lParam);
@@ -14,4 +15,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	return window.run();
+}*/
+
+int main(int argc, char** argv) {
+	GLUTWindow window(&argc, argv);
+	window.init();
+	return 0;
 }
