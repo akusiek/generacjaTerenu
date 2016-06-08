@@ -1,6 +1,11 @@
 #pragma once
 #include <string>
 #include <GL/freeglut.h>
+#include <ctime>
+#include <iostream>
+#include "glm.hpp"
+
+#define terrain_size 50
 
 class GLUTWindow
 {
@@ -14,11 +19,21 @@ class GLUTWindow
 	static void processKeys(unsigned char key, int x, int y);
 	static void processMouseKeys(int button, int state, int x, int y);
 	static void processMouseMovement(int x,int y);
-	//static void processSpecialKeys(int key, int x, int y);
-	static float angleH, angleV;
-	static float lx, ly, lz, x, y, z;
-	static float deltaAngleX, deltaAngleY;
-	static int xOrigin, yOrigin;
+	static void generateTerrain(int iterations);
+	static void renderTerrain(unsigned int);
+
+	//new stuff
+	static glm::vec3 cameraPos; 
+	static glm::vec3 cameraFront;
+	static glm::vec3 cameraUp;
+
+	static bool isFirstMouse;
+	static float lastX, lastY;
+	static float yaw, pitch;
+	
+	//terrain
+	static float terrain[terrain_size][terrain_size];
+	static void printTerrain();
 public:
 	GLUTWindow(int* , char**);
 	GLUTWindow(int , int , int , int , unsigned int , std::string , int* , char** );
