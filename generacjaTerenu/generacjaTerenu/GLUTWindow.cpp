@@ -20,6 +20,9 @@ float GLUTWindow::moveSpeedLeftRight;
 float GLUTWindow::moveSpeedUpDown;
 
 bool GLUTWindow::isFirstMouse;
+bool GLUTWindow::firstRender;
+
+float GLUTWindow::smooth_factor;
 
 
 GLUTWindow::GLUTWindow(int* argc_, char **argv_)
@@ -43,6 +46,8 @@ GLUTWindow::GLUTWindow(int* argc_, char **argv_)
 	moveSpeedLeftRight = 0.0f;
 	moveSpeedUpDown = 0.0f;
 	isFirstMouse = true;
+	firstRender = true;
+	smooth_factor = 0.11111f;
 }
 
 GLUTWindow::GLUTWindow(int posX, int posY, int width, int height, unsigned int mode, std::string name, int* argc_, char **argv_) {
@@ -65,6 +70,8 @@ GLUTWindow::GLUTWindow(int posX, int posY, int width, int height, unsigned int m
 	moveSpeedLeftRight = 0.0f;
 	moveSpeedUpDown = 0.0f;
 	isFirstMouse = true;
+	firstRender - true;
+	smooth_factor = 0.11111f;
 }
 
 void GLUTWindow::generateTerrain(int iterations) { // TODO: flatten the terrain and maybe try another algorithm
@@ -127,6 +134,21 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 		}
 		break;
 	case 1: // TODO: terrain rendering with triangle usage 
+		for (int x = 0; x < terrain_size - 1; ++x) {
+			for (int z = 0; z < terrain_size - 1; ++z) {
+				glColor3f(0.5f, 0.5f, 0.5f);
+				glBegin(GL_TRIANGLES);
+				glVertex3f(x*0.1f, terrain[x][z] * 0.1f, z*0.1f);
+				glVertex3f(x*0.1f, terrain[x][z + 1] * 0.1f, (z + 1)*0.1);
+				glVertex3f((x + 1)*0.1f, terrain[x + 1][z + 1] * 0.1f, (z + 1)*0.1f);
+				glEnd();
+				glBegin(GL_TRIANGLES);
+				glVertex3f((x + 1)*0.1f, terrain[x + 1][z + 1] * 0.1f, (z + 1)*0.1f);
+				glVertex3f((x + 1)*0.1f, terrain[x + 1][z] * 0.1f, z*0.1f);
+				glVertex3f(x*0.1f, terrain[x][z] * 0.1f, z*0.1f);
+				glEnd();
+			}
+		}
 		break;
 	case 2: //squares
 		for (int x = 0; x < terrain_size - 1; ++x) {
@@ -149,8 +171,6 @@ void GLUTWindow::renderScene() {
 
 	glLoadIdentity();
 
-
-
 	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
 			cameraPos.x+cameraFront.x, cameraPos.y+cameraFront.y, cameraPos.z+cameraFront.z,
 			cameraUp.x, cameraUp.y, cameraUp.z);
@@ -163,7 +183,7 @@ void GLUTWindow::renderScene() {
 		glVertex3f(terrain_size*0.1f, 0.1f, 0.0f);
 	glEnd();
 
-	renderTerrain(2);
+	renderTerrain(1);
 
 	glutSwapBuffers();
 }
@@ -213,8 +233,11 @@ void GLUTWindow::keyStrokes() {
 	if ((moveSpeedFrontBack != 0) || (moveSpeedLeftRight != 0) || (moveSpeedUpDown != 0)) {
 		calculatePosition();
 	}
+	if (firstRender) {
+		glutPostRedisplay();
+		firstRender = false;
+	}
 }
-
 void GLUTWindow::processMouseMovement(int x, int y) {
 	if (isFirstMouse) {
 		lastX = x;
@@ -260,11 +283,62 @@ void GLUTWindow::whereIsCursor(int state) {
 	}
 }
 
-void GLUTWindow::init() {
-	srand(time(NULL));
-	generateTerrain(2500);
+void GLUTWindow::smootherTerrain(unsigned int type) {
+	switch (type) {
+	case 0:
+		for (int x = 1; x < terrain_size; x++) {
+			for (int z = 0; z < terrain_size; z++) {
+				terrain[x][z] = terrain[x - 1][z] * (1 - smooth_factor) + terrain[x][z] * smooth_factor;
+			}
+		}
+		for (int x = terrain_size - 2; x < -1; x--) {
+			for (int z = 0; z < terrain_size; z++) {
+				terrain[x][z] = terrain[x + 1][z] * (1 - smooth_factor) +
+					terrain[x][z] * smooth_factor;
+			}
+		}
+		for (int x = 0; x < terrain_size; x++) {
+			for (int z = 1; z < terrain_size; z++) {
+				terrain[x][z] = terrain[x][z - 1] * (1 - smooth_factor) +
+					terrain[x][z] * smooth_factor;
+			}
+		}
 
+		for (int x = 0; x < terrain_size; x++) {
+			for (int z = terrain_size; z < -1; z--) {
+				terrain[x][z] = terrain[x][z + 1] * (1 - smooth_factor) +
+					terrain[x][z] * smooth_factor;
+			}
+		}
+		break;
+	case 1:
+		float smooth_matrix[3][3] = { { 0 } };
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 3; ++j) {
+				smooth_matrix[i][j] = smooth_factor;
+			}
+		}
+		for (int x = 1; x < terrain_size - 1; ++x) {
+			for (int z = 1; z < terrain_size - 1; ++z) {
+				terrain[x][z] = smooth_matrix[0][0] * terrain[x - 1][z - 1] + smooth_matrix[0][1] * terrain[x - 1][z] + smooth_matrix[0][2] * terrain[x - 1][z + 1] +
+						smooth_matrix[1][0] * terrain[x][z - 1] + smooth_matrix[1][1] * terrain[x][z] + smooth_matrix[1][2] * terrain[x][z + 1] +
+						smooth_matrix[2][0] * terrain[x + 1][z - 1] + smooth_matrix[2][1] * terrain[x + 1][z] + smooth_matrix[2][2] * terrain[x + 1][z + 1];
+			}
+		}
+		break;
+	}
+
+}
+
+void GLUTWindow::init() {
+	//srand(time(NULL));
+	srand(0);
+	for (int i = 0; i < 5; i++)
+		generateTerrain(3000);
+
+	smootherTerrain(1);
 	printTerrain();
+
 	glutInit(argc, argv);
 	glutInitDisplayMode(displ_mod);
 	glutInitWindowPosition(win_pos_x, win_pos_y);

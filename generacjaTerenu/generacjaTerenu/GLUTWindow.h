@@ -5,7 +5,7 @@
 #include <iostream>
 #include "glm.hpp"
 
-#define terrain_size 100
+#define terrain_size 100 
 
 class GLUTWindow
 {
@@ -15,6 +15,7 @@ class GLUTWindow
 	std::string win_name;
 	int* argc;
 	char** argv;
+	static float smooth_factor;
 	static void renderScene();
 	static void changeSize(int w, int h);
 	//static void processKeys(unsigned char key, int x, int y);
@@ -27,12 +28,13 @@ class GLUTWindow
 	static void renderTerrain(unsigned int);
 	static void whereIsCursor(int state);
 	static void calculatePosition();
+	static void smootherTerrain(unsigned int);
 	//new stuff
 	static glm::vec3 cameraPos; 
 	static glm::vec3 cameraFront;
 	static glm::vec3 cameraUp;
 
-	static bool isFirstMouse;
+	static bool isFirstMouse, firstRender;
 	static float lastX, lastY;
 	static float yaw, pitch;
 	
