@@ -54,7 +54,7 @@ GLUTWindow::GLUTWindow(int posX, int posY, int width, int height, unsigned int m
 	isFirstMouse = true;
 }
 
-void GLUTWindow::generateTerrain(int iterations) {
+void GLUTWindow::generateTerrain(int iterations) { // TODO: flatten the terrain and maybe try another algorithm
 	int i = 0;
 	int x = rand() % terrain_size;
 	int z = rand() % terrain_size;
@@ -114,7 +114,7 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 			}
 		}
 		break;
-	case 1: //triangles
+	case 1: // TODO: terrain rendering with triangle usage 
 		break;
 	case 2: //squares
 		for (int x = 0; x < terrain_size - 1; ++x) {
@@ -230,7 +230,7 @@ void GLUTWindow::processMouseMovement(int x, int y) {
 
 void GLUTWindow::init() {
 	srand(time(NULL));
-	generateTerrain(5000);
+	generateTerrain(2500);
 
 	printTerrain();
 	glutInit(argc, argv);
@@ -239,15 +239,14 @@ void GLUTWindow::init() {
 	glutInitWindowSize(win_width, win_height);
 	glutCreateWindow(win_name.c_str());
 	//glutEnterGameMode();
-
+	// TODO: Fix camera bug while leaving and going back to the window
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
-	glutIdleFunc(renderScene);
-	glutKeyboardFunc(processKeys);
+	glutIdleFunc(renderScene); // TODO: do not render image every frame 
+	glutKeyboardFunc(processKeys); // TODO: smoother key handling (upfunc)
 	glutPassiveMotionFunc(processMouseMovement);
 
-	//glutSetCursor(GLUT_CURSOR_NONE);
-
+	glutSetCursor(GLUT_CURSOR_NONE);
 	glEnable(GL_DEPTH_TEST);
 
 	glutMainLoop();

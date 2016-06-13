@@ -5,7 +5,7 @@
 #include <iostream>
 #include "glm.hpp"
 
-#define terrain_size 50
+#define terrain_size 100
 
 class GLUTWindow
 {
