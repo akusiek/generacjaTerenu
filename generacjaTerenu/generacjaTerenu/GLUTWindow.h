@@ -4,6 +4,10 @@
 #include <ctime>
 #include <iostream>
 #include "glm.hpp"
+#include "Lights.h"
+#include "OperacjeNaWektorach.h"
+#include "SystemDrzew.h"
+#define terrain_size 50
 
 #define terrain_size 50 
 #define smooth_factor 0.3f
@@ -44,6 +48,10 @@ class GLUTWindow
 	//terrain
 	static float terrain[terrain_size][terrain_size];
 	static void printTerrain();
+
+	static Lights * lights;
+	static OperacjeNaWektorach * operacjeNaWektorach;
+	static SystemDrzew * systemDrzew;
 public:
 	GLUTWindow(int* , char**);
 	GLUTWindow(int , int , int , int , unsigned int , std::string , int* , char** );
