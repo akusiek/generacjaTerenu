@@ -122,18 +122,30 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
+   <ItemGroup>
     <ClCompile Include="Drawer.cpp" />
+    <ClCompile Include="Drzewo.cpp" />
+    <ClCompile Include="Galaz.cpp" />
+    <ClCompile Include="GalazOpenGL.cpp" />
     <ClCompile Include="GLUTWindow.cpp" />
+    <ClCompile Include="Lights.cpp" />
     <ClCompile Include="Okno.cpp" />
     <ClCompile Include="OknoOpenGL.cpp" />
+    <ClCompile Include="OperacjeNaWektorach.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SystemDrzew.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawer.h" />
+    <ClInclude Include="Drzewo.h" />
+    <ClInclude Include="Galaz.h" />
+    <ClInclude Include="GalazOpenGL.h" />
     <ClInclude Include="GLUTWindow.h" />
+    <ClInclude Include="Lights.h" />
     <ClInclude Include="Okno.h" />
     <ClInclude Include="OknoOpenGL.h" />
+    <ClInclude Include="OperacjeNaWektorach.h" />
+    <ClInclude Include="SystemDrzew.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

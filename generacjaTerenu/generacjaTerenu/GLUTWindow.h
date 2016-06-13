@@ -7,6 +7,7 @@
 #include "Lights.h"
 #include "OperacjeNaWektorach.h"
 #include "SystemDrzew.h"
+
 #define terrain_size 50
 
 #define terrain_size 50 
