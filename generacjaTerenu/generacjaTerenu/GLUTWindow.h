@@ -9,6 +9,8 @@
 #include "SystemDrzew.h"
 #include "Definicje.h"
 
+//#define terrain_size 50
+
 class GLUTWindow
 {
 	int win_pos_x, win_pos_y;
