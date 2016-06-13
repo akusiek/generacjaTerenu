@@ -185,7 +185,7 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 	case 2: //squares
 		for (int x = 0; x < terrain_size - 1; ++x) {
 			for (int z = 0; z < terrain_size - 1; ++z) {
-				glColor3f(0.5f, 0.5f, 0.5f);
+				glColor3f(0.1f, 0.7f, 0.2f);
 				const float scale = 0.1f;
 				glBegin(GL_QUADS);
 
@@ -254,7 +254,8 @@ void GLUTWindow::keyPressed(unsigned char key, int x, int y) {
 	case 's': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = -0.1f : moveSpeedFrontBack = 0.1f; break;
 	case '-': lights->changBackgroundLignt(-0.1); break;
 	case '+': lights->changBackgroundLignt(0.1); break;
-	case ' ': moveSpeedUpDown = 0.1f; break;
+	case ' ': (moveSpeedUpDown == 0.0f) ? moveSpeedUpDown = 0.1f : moveSpeedUpDown = -0.1f; break;
+	case 'c': (moveSpeedUpDown == 0.0f) ? moveSpeedUpDown = -0.1f : moveSpeedUpDown = 0.1f; break;
 	}
 }
 
@@ -265,7 +266,8 @@ void GLUTWindow::keyReleased(unsigned char key, int x, int y) {
 	case 'd': moveSpeedLeftRight = 0.0f; break;
 	case 'w': 
 	case 's': moveSpeedFrontBack = 0.0f; break;
-	case ' ': moveSpeedUpDown = 0.0f; break;
+	case ' ': 
+	case 'c': moveSpeedUpDown = 0.0f; break;
 	}
 }
 
