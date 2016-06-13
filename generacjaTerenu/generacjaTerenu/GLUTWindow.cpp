@@ -12,6 +12,13 @@ float GLUTWindow::lastY;
 float GLUTWindow::yaw;
 float GLUTWindow::pitch;
 
+int GLUTWindow::win_width;
+int GLUTWindow::win_height;
+
+float GLUTWindow::moveSpeedFrontBack;
+float GLUTWindow::moveSpeedLeftRight;
+float GLUTWindow::moveSpeedUpDown;
+
 bool GLUTWindow::isFirstMouse;
 
 
@@ -32,6 +39,9 @@ GLUTWindow::GLUTWindow(int* argc_, char **argv_)
 	lastY = win_height / 2;
 	yaw = 0;
 	pitch = 0;
+	moveSpeedFrontBack = 0.0f;
+	moveSpeedLeftRight = 0.0f;
+	moveSpeedUpDown = 0.0f;
 	isFirstMouse = true;
 }
 
@@ -51,6 +61,9 @@ GLUTWindow::GLUTWindow(int posX, int posY, int width, int height, unsigned int m
 	lastY = win_height / 2;
 	yaw = 0;
 	pitch = 0;
+	moveSpeedFrontBack = 0.0f;
+	moveSpeedLeftRight = 0.0f;
+	moveSpeedUpDown = 0.0f;
 	isFirstMouse = true;
 }
 
@@ -59,7 +72,6 @@ void GLUTWindow::generateTerrain(int iterations) { // TODO: flatten the terrain 
 	int x = rand() % terrain_size;
 	int z = rand() % terrain_size;
 	while (i < iterations) {
-		//terrain[x][z] += (float)(iterations / (i + 1)*10);
 		terrain[x][z] += 2.0f;
 		int move = rand() % 4;
 		switch (move) {
@@ -137,15 +149,11 @@ void GLUTWindow::renderScene() {
 
 	glLoadIdentity();
 
+
+
 	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
 			cameraPos.x+cameraFront.x, cameraPos.y+cameraFront.y, cameraPos.z+cameraFront.z,
 			cameraUp.x, cameraUp.y, cameraUp.z);
-	/*glColor3f(1.0f, 0.0f, 0.0f);
-	glBegin(GL_TRIANGLES);
-		glVertex3f(-5.0f, -10.0f, 0.0f);
-		glVertex3f(0.0f, 10.0f, 0.0f);
-		glVertex3f(5.0f, -10.0f, 0.0f);
-	glEnd();*/
 
 	glColor3f(0.0f, 0.0f, 0.5f);
 	glBegin(GL_QUADS);
@@ -170,29 +178,40 @@ void GLUTWindow::changeSize(int w, int h) {
 	glViewport(0, 0, w, h);
 	gluPerspective(45, ratio, 1, 1000);
 	glMatrixMode(GL_MODELVIEW);
-	//glEnable(GL_LIGHTING);
 }
 
-void GLUTWindow::processKeys(unsigned char key, int x, int y) {
-	
-	float speed = 0.05f;
+void GLUTWindow::keyPressed(unsigned char key, int x, int y) {
+	switch (key) {
+	case 27: exit(0); break;
+	case 'a': (moveSpeedLeftRight == 0.0f) ? moveSpeedLeftRight = -0.1f : moveSpeedLeftRight = 0.1f; break;
+	case 'd': (moveSpeedLeftRight == 0.0f) ? moveSpeedLeftRight = 0.1f : moveSpeedLeftRight = -0.1f; break;
+	case 'w': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = 0.1f : moveSpeedFrontBack = -0.1f; break;
+	case 's': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = -0.1f : moveSpeedFrontBack = 0.1f; break;
+	case ' ': moveSpeedUpDown = 0.1f; break;
+	}
+}
 
-	if (key == 27)
-		exit(0);
-	else if (key == 'a') {
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+void GLUTWindow::keyReleased(unsigned char key, int x, int y) {
+	switch (key) {
+	case 27: exit(0); break;
+	case 'a': 
+	case 'd': moveSpeedLeftRight = 0.0f; break;
+	case 'w': 
+	case 's': moveSpeedFrontBack = 0.0f; break;
+	case ' ': moveSpeedUpDown = 0.0f; break;
 	}
-	else if (key == 'd') {
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
-	}
-	else if (key == 'w') {
-		cameraPos += speed*cameraFront;
-	}
-	else if (key == 's') {
-		cameraPos -= speed*cameraFront;
-	}
-	else if (key == ' ') {
-		cameraPos += speed*cameraUp;
+}
+
+void GLUTWindow::calculatePosition() {
+	cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * moveSpeedLeftRight;
+	cameraPos += moveSpeedFrontBack*cameraFront;
+	cameraPos += moveSpeedUpDown*cameraUp;
+	glutPostRedisplay();
+}
+
+void GLUTWindow::keyStrokes() {
+	if ((moveSpeedFrontBack != 0) || (moveSpeedLeftRight != 0) || (moveSpeedUpDown != 0)) {
+		calculatePosition();
 	}
 }
 
@@ -226,6 +245,19 @@ void GLUTWindow::processMouseMovement(int x, int y) {
 	front.y = sin(glm::radians(pitch));
 	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
 	cameraFront = glm::normalize(front);	
+
+	glutPostRedisplay();
+
+	if ((x < win_width / 2) || (x > win_width / 2) || (y < win_height / 2) || (y > win_height / 2)) {
+		glutWarpPointer(win_width/2, win_height/2);
+		isFirstMouse = true;
+	}
+}
+
+void GLUTWindow::whereIsCursor(int state) {
+	if (state == GLUT_LEFT) {
+		isFirstMouse = true;
+	}
 }
 
 void GLUTWindow::init() {
@@ -239,16 +271,21 @@ void GLUTWindow::init() {
 	glutInitWindowSize(win_width, win_height);
 	glutCreateWindow(win_name.c_str());
 	//glutEnterGameMode();
-	// TODO: Fix camera bug while leaving and going back to the window
+	
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
-	glutIdleFunc(renderScene); // TODO: do not render image every frame 
-	glutKeyboardFunc(processKeys); // TODO: smoother key handling (upfunc)
+	glutIdleFunc(keyStrokes); 
+	glutKeyboardFunc(keyPressed); 
+	glutKeyboardUpFunc(keyReleased);
 	glutPassiveMotionFunc(processMouseMovement);
+	glutEntryFunc(whereIsCursor);
 
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glEnable(GL_DEPTH_TEST);
 
+	glutIgnoreKeyRepeat(1);
+
+	glutPostRedisplay();
 	glutMainLoop();
 }
 
