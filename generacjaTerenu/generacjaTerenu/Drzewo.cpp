@@ -43,9 +43,46 @@ void Drzewo::stworzObudowe(float obudowa[4][3], float wysokosc, float szerokoscP
 		for (int j = 0; j < 3; j++)
 			obudowa[i][j] = obudowaTmp[i][j];
 }
+
+void Drzewo::losujObrot(float obrot[3])
+{
+	obrot[0] = 0;
+	obrot[1] = (float)(rand() % 360);
+	obrot[2] = (float)(rand() % 50 + 30);
+}
+void Drzewo::znajdzKatyObrotuGalezi(float katyObrotu[5][3], float iloscRozgalezien)
+{
+	bool przelosuj = true;
+	do
+	{
+		przelosuj = false;
+		for (int i = 0; i < (int)iloscRozgalezien; i++) {
+			losujObrot(katyObrotu[i]);
+		}
+		for (int i = 0; i < (int)iloscRozgalezien; i++) {
+			for (int j = 0; j < (int)iloscRozgalezien; j++) {
+				if (j != i){
+					float kat1 = katyObrotu[i][1];
+					float kat2 = katyObrotu[j][1];
+					if (abs(kat1 - kat2) < 50){
+						przelosuj = true;
+					}
+				}
+			}
+		}
+
+	} while (przelosuj!=false);
+
+
+}
+
 void Drzewo::generujDrzewo(float maxDlugosc, int iloscRozgalezien, Galaz* galaz, float szerokoscGalezi)
 {
 	vector<Galaz*>* next = galaz->getNext();
+
+	float katyObrotu[5][3];
+	
+	znajdzKatyObrotuGalezi(katyObrotu, iloscRozgalezien);
 
 	for (int i = 0; i < iloscRozgalezien; i++){
 
@@ -56,32 +93,31 @@ void Drzewo::generujDrzewo(float maxDlugosc, int iloscRozgalezien, Galaz* galaz,
 
 		float pozycjaGalezi[3] = {0, dlugosc, 0 };
 
-		
 		float obudowa[4][3];
 
-		stworzObudowe(obudowa, dlugosc /1000, szerokoscGalezi);
+		stworzObudowe(obudowa, dlugosc/1000, szerokoscGalezi);
 
-		float obrot[3] = {0, (float)(rand() % 360) , (float)(rand() % 50 + 30) };
-		obroc(pozycjaGalezi, obudowa, obrot);
+		//float obrot[3] = {0, (float)(rand() % 360) , (float)(rand() % 50 + 30) };
+		obroc(pozycjaGalezi, obudowa, katyObrotu[i]);
 
-		pozycjaGalezi[0] += galaz->getPosition()[0];
-		pozycjaGalezi[1] += galaz->getPosition()[1];
-		pozycjaGalezi[2] += galaz->getPosition()[2];
-		for (int i = 0; i < 4; i++)
-		{
-			obudowa[i][0] += galaz->getPosition()[0];
-			obudowa[i][1] += galaz->getPosition()[1];
-			obudowa[i][2] += galaz->getPosition()[2];
+		for (int j = 0; j < 3; j++) {
+			pozycjaGalezi[j] += galaz->getPosition()[j];
+		}
+		
+		for (int i = 0; i < 4; i++){
+			for (int j = 0; j < 3; j++){
+				obudowa[i][j] += galaz->getPosition()[j];
+			}
 		}
 
-		next->push_back(new GalazOpenGL(pozycjaGalezi, szerokoscPnia, galaz, obudowa, obrot));
+		next->push_back(new GalazOpenGL(pozycjaGalezi, szerokoscGalezi, galaz, obudowa, katyObrotu[i]));
 		generujDrzewo(maxDlugosc/2, iloscRozgalezien-1, (*next)[i] , szerokoscGalezi/2);
 	}
 }
 
 Drzewo::Drzewo(float pozycjaDrzewa[3])
 {
-	srand( (int) time( NULL ) );
+	
 	szerokoscPnia = 0.02f;
 
 	float szerokoscGalezi = 0.04f;
@@ -90,30 +126,51 @@ Drzewo::Drzewo(float pozycjaDrzewa[3])
 	stworzObudowe(obudowa, 0, szerokoscGalezi);
 
 	szerokoscGalezi /= 2;
-	for (int i = 0; i < 4; i++)
-	{
-		obudowa[i][0] += pozycjaDrzewa[0];
-		obudowa[i][1] += pozycjaDrzewa[1];
-		obudowa[i][2] += pozycjaDrzewa[2];
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 3; j++) {
+			obudowa[i][j] += pozycjaDrzewa[j];
+		}
 	}
 	float obrot[3] = { 0, 0, 0 };
 	pien = new GalazOpenGL(pozycjaDrzewa, szerokoscGalezi, nullptr, obudowa, obrot);
-	vector<Galaz*>* next = pien->getNext();
-	int iloscRozgalezien = 1;
-	pozycjaDrzewa[1] = 0.4f;
+
+
+	pozycjaDrzewa[1] += 0.2f;
 
 	float obudowa2[4][3];
 	stworzObudowe(obudowa2, 0, szerokoscGalezi);
-	for (int i = 0; i < 4; i++)
-	{
-		obudowa2[i][0] += pozycjaDrzewa[0];
-		obudowa2[i][1] += pozycjaDrzewa[1];
-		obudowa2[i][2] += pozycjaDrzewa[2];
-	}
 
+
+	float obrot2[3] = { rand() % 16 - 8, 0, rand()%16 - 8};
+	float zmianaPodczasObrotu[3] = { 0 , 0.2f, 0 };
+	obroc(zmianaPodczasObrotu, obudowa2, obrot2);
+	zmianaPodczasObrotu[1] -= 0.2f;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 3; j++) {
+			obudowa2[i][j] += zmianaPodczasObrotu[j];
+			obudowa2[i][j] += pozycjaDrzewa[j];
+		}
+	}
+	vector<Galaz*>* next = pien->getNext();
 	next->push_back(new GalazOpenGL(pozycjaDrzewa, szerokoscGalezi, pien, obudowa2, obrot));
 
-	generujDrzewo(0.4f, 4, (*next)[0], szerokoscGalezi);
+
+
+	pozycjaDrzewa[1] += 0.2f;
+
+	float obudowa3[4][3];
+	stworzObudowe(obudowa3, 0, szerokoscGalezi);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 3; j++) {
+			obudowa3[i][j] += pozycjaDrzewa[j];
+		}
+	}
+	
+
+
+	(*next)[0]->getNext()->push_back(new GalazOpenGL(pozycjaDrzewa, szerokoscGalezi, (*next)[0], obudowa2, obrot));
+
+	generujDrzewo(0.4f, 4, (*(*next)[0]->getNext())[0], szerokoscGalezi);
 }
 
 Drzewo::~Drzewo()

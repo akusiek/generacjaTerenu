@@ -7,10 +7,8 @@
 #include "Lights.h"
 #include "OperacjeNaWektorach.h"
 #include "SystemDrzew.h"
-#define terrain_size 50
+#include "Definicje.h"
 
-#define terrain_size 50 
-#define smooth_factor 0.3f
 class GLUTWindow
 {
 	int win_pos_x, win_pos_y;

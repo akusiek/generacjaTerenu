@@ -228,7 +228,7 @@ void GLUTWindow::renderScene() {
 	glShadeModel(GL_SMOOTH);
 	glColor3f(0.5f, 0.5f, 0.5f);
 	renderTerrain(2);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.5, 0.25, 0);
 	systemDrzew->Rysuj();
 	glutSwapBuffers();
 }
@@ -382,6 +382,7 @@ void GLUTWindow::init() {
 	//srand(0);
 	//for (int i = 0; i < 100; i++)
 		generateTerrain(1000, 1, 0.4f);
+		systemDrzew->generuj(terrain);
 
 	smootherTerrain(0);
 	printTerrain();

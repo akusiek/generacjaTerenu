@@ -5,6 +5,7 @@
 #include "OperacjeNaWektorach.h"
 #include <cstdlib>
 #include <time.h>
+#include<math.h>
 
 class Drzewo
 {
@@ -16,6 +17,8 @@ protected:
 	static OperacjeNaWektorach operacjeNaWektorach;
 	void stworzObudowe(float obudowa[4][3], float wysokosc, float szerokoscPnia);
 	void obroc(float pozycjaGalezi[3], float obudowa[4][3], float obrot[3]);
+	void znajdzKatyObrotuGalezi(float katyObrotu[5][3], float iloscRozgalezien);
+	void losujObrot(float obrot[3]);
 public:
 	Drzewo(float pozycjaDrzewa[3]);
 	~Drzewo();

@@ -1,5 +1,6 @@
 #pragma once
 #include "Drzewo.h"
+#include "Definicje.h"
 #include <vector>
 class SystemDrzew
 {
@@ -7,6 +8,7 @@ class SystemDrzew
 public:
 	SystemDrzew();
 	~SystemDrzew();
+	void generuj(float terrain[terrain_size][terrain_size]);
 	void Rysuj();
 };
 
