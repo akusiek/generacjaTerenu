@@ -133,7 +133,11 @@
     <ClCompile Include="OknoOpenGL.cpp" />
     <ClCompile Include="OperacjeNaWektorach.cpp" />
     <ClCompile Include="Source.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="SystemDrzew.cpp" />
+=======
+    <ClCompile Include="Timer.cpp" />
+>>>>>>> refs/remotes/Matipu/master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawer.h" />
@@ -144,8 +148,12 @@
     <ClInclude Include="Lights.h" />
     <ClInclude Include="Okno.h" />
     <ClInclude Include="OknoOpenGL.h" />
+<<<<<<< HEAD
     <ClInclude Include="OperacjeNaWektorach.h" />
     <ClInclude Include="SystemDrzew.h" />
+=======
+    <ClInclude Include="Timer.h" />
+>>>>>>> refs/remotes/Matipu/master
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
