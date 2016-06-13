@@ -27,7 +27,6 @@
     <ClCompile Include="Drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="GLUTWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,9 +46,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SystemDrzew.cpp">
-=======
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Timer.cpp">
->>>>>>> refs/remotes/Matipu/master
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,7 +62,6 @@
     <ClInclude Include="Drawer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="GLUTWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -83,9 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SystemDrzew.h">
-=======
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Timer.h">
->>>>>>> refs/remotes/Matipu/master
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
