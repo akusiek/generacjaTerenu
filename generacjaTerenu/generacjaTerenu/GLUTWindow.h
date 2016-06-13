@@ -5,8 +5,8 @@
 #include <iostream>
 #include "glm.hpp"
 
-#define terrain_size 100 
-
+#define terrain_size 50 
+#define smooth_factor 0.3f
 class GLUTWindow
 {
 	int win_pos_x, win_pos_y;
@@ -15,7 +15,7 @@ class GLUTWindow
 	std::string win_name;
 	int* argc;
 	char** argv;
-	static float smooth_factor;
+	//static float smooth_factor;
 	static void renderScene();
 	static void changeSize(int w, int h);
 	//static void processKeys(unsigned char key, int x, int y);
@@ -24,7 +24,7 @@ class GLUTWindow
 	static void keyStrokes();
 	static void processMouseKeys(int button, int state, int x, int y);
 	static void processMouseMovement(int x,int y);
-	static void generateTerrain(int iterations);
+	static void generateTerrain(int iterations, int, float);
 	static void renderTerrain(unsigned int);
 	static void whereIsCursor(int state);
 	static void calculatePosition();
