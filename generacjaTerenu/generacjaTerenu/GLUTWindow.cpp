@@ -22,6 +22,10 @@ float GLUTWindow::moveSpeedUpDown;
 bool GLUTWindow::isFirstMouse;
 bool GLUTWindow::firstRender;
 
+Lights* GLUTWindow::lights = new Lights();
+OperacjeNaWektorach* GLUTWindow::operacjeNaWektorach = new OperacjeNaWektorach();
+SystemDrzew* GLUTWindow::systemDrzew = new SystemDrzew();
+
 //float GLUTWindow::smooth_factor;
 
 
@@ -182,11 +186,20 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 		for (int x = 0; x < terrain_size - 1; ++x) {
 			for (int z = 0; z < terrain_size - 1; ++z) {
 				glColor3f(0.5f, 0.5f, 0.5f);
+				const float scale = 0.1f;
 				glBegin(GL_QUADS);
-				glVertex3f((GLfloat)x*0.1f, (GLfloat)terrain[x][z] * 0.1f, (GLfloat)z*0.1f);
-				glVertex3f((GLfloat)x*0.1f, (GLfloat)terrain[x][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f);
-				glVertex3f((GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f);
-				glVertex3f((GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z] * 0.1f, (GLfloat)z*0.1f);
+
+				float vector1[3] = { x*scale, terrain[x][z] * scale, z*scale };
+				float vector2[3] = { x*scale, terrain[x][z + 1] * scale, (z + 1)*scale };
+				float vector3[3] = { (x + 1)*scale, terrain[x + 1][z + 1] * scale, (z + 1)*scale };
+				float vector4[3] = { (x + 1)*scale, terrain[x + 1][z] * scale, z*scale };
+				float wynik[3];
+				glNormal3fv(operacjeNaWektorach->jednostkowyWektorNormalny3fv(vector1, vector2, vector3, wynik));
+				glVertex3fv(vector1);
+				glVertex3fv(vector2);
+				glVertex3fv(vector3);
+				glVertex3fv(vector4);
+
 				glEnd();
 			}
 		}
@@ -196,6 +209,8 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 
 void GLUTWindow::renderScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	lights->obsluzOswietlenie();
 
 	glLoadIdentity();
 
@@ -210,9 +225,11 @@ void GLUTWindow::renderScene() {
 	//	glVertex3f(terrain_size*0.1f, 0.1f, terrain_size*0.1f);
 	//	glVertex3f(terrain_size*0.1f, 0.1f, 0.0f);
 	//glEnd();
-
-	renderTerrain(1);
-
+	glShadeModel(GL_SMOOTH);
+	glColor3f(0.5f, 0.5f, 0.5f);
+	renderTerrain(2);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	systemDrzew->Rysuj();
 	glutSwapBuffers();
 }
 
@@ -235,6 +252,8 @@ void GLUTWindow::keyPressed(unsigned char key, int x, int y) {
 	case 'd': (moveSpeedLeftRight == 0.0f) ? moveSpeedLeftRight = 0.1f : moveSpeedLeftRight = -0.1f; break;
 	case 'w': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = 0.1f : moveSpeedFrontBack = -0.1f; break;
 	case 's': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = -0.1f : moveSpeedFrontBack = 0.1f; break;
+	case '-': lights->changBackgroundLignt(-0.1); break;
+	case '+': lights->changBackgroundLignt(0.1); break;
 	case ' ': moveSpeedUpDown = 0.1f; break;
 	}
 }
