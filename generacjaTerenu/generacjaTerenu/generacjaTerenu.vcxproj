@@ -141,7 +141,6 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Definicje.h" />
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="Drzewo.h" />
     <ClInclude Include="Galaz.h" />

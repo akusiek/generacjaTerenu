@@ -14,9 +14,12 @@ float GLUTWindow::pitch;
 int GLUTWindow::win_width;
 int GLUTWindow::win_height;
 
-float GLUTWindow::moveSpeedFrontBack;
-float GLUTWindow::moveSpeedLeftRight;
-float GLUTWindow::moveSpeedUpDown;
+float GLUTWindow::forwardSpeed;
+float GLUTWindow::backwardSpeed;
+float GLUTWindow::leftSpeed;
+float GLUTWindow::rightSpeed;
+float GLUTWindow::upSpeed;
+float GLUTWindow::downSpeed;
 
 bool GLUTWindow::isFirstMouse;
 bool GLUTWindow::firstRender;
@@ -44,11 +47,14 @@ GLUTWindow::GLUTWindow(int* argc_, char **argv_)
 	lastY = (float)win_height / 2;
 	yaw = 0;
 	pitch = 0;
-	moveSpeedFrontBack = 0.0f;
-	moveSpeedLeftRight = 0.0f;
-	moveSpeedUpDown = 0.0f;
 	isFirstMouse = true;
 	firstRender = true;
+	forwardSpeed = 0.0f;
+	backwardSpeed = 0.0f;
+	leftSpeed = 0.0f;
+	rightSpeed = 0.0f;
+	upSpeed = 0.0f;
+	downSpeed = 0.0f;
 }
 
 GLUTWindow::GLUTWindow(int posX, int posY, int width, int height, unsigned int mode, std::string name, int* argc_, char **argv_) {
@@ -67,11 +73,14 @@ GLUTWindow::GLUTWindow(int posX, int posY, int width, int height, unsigned int m
 	lastY = (float)win_height / 2;
 	yaw = 0;
 	pitch = 0;
-	moveSpeedFrontBack = 0.0f;
-	moveSpeedLeftRight = 0.0f;
-	moveSpeedUpDown = 0.0f;
 	isFirstMouse = true;
 	firstRender = true;
+	forwardSpeed = 0.0f;
+	backwardSpeed = 0.0f;
+	leftSpeed = 0.0f;
+	rightSpeed = 0.0f;
+	upSpeed = 0.0f;
+	downSpeed = 0.0f;
 }
 
 void GLUTWindow::renderScene() {
@@ -108,37 +117,36 @@ void GLUTWindow::changeSize(int w, int h) {
 
 void GLUTWindow::keyPressed(unsigned char key, int x, int y) {
 	switch (key) {
-	case 27: exit(0); break;
-	case 'a': (moveSpeedLeftRight == 0.0f) ? moveSpeedLeftRight = -0.1f : moveSpeedLeftRight = 0.1f; break;
-	case 'd': (moveSpeedLeftRight == 0.0f) ? moveSpeedLeftRight = 0.1f : moveSpeedLeftRight = -0.1f; break;
-	case 'w': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = 0.1f : moveSpeedFrontBack = -0.1f; break;
-	case 's': (moveSpeedFrontBack == 0.0f) ? moveSpeedFrontBack = -0.1f : moveSpeedFrontBack = 0.1f; break;
+	case 'a': leftSpeed = -0.1f; break;
+	case 'd': rightSpeed = 0.1f; break;
+	case 'w': forwardSpeed = 0.1f; break;
+	case 's': backwardSpeed = -0.1f; break;
 	case '-': lights->changBackgroundLignt(-0.1); break;
 	case '+': lights->changBackgroundLignt(0.1); break;
-	case ' ': (moveSpeedUpDown == 0.0f) ? moveSpeedUpDown = 0.1f : moveSpeedUpDown = -0.1f; break;
-	case 'c': (moveSpeedUpDown == 0.0f) ? moveSpeedUpDown = -0.1f : moveSpeedUpDown = 0.1f; break;
+	case ' ': upSpeed = 0.1f; break;
+	case 'c': downSpeed = -0.1f; break;
 	}
 }
 
 void GLUTWindow::keyReleased(unsigned char key, int x, int y) {
 	switch (key) {
 	case 27: exit(0); break;
-	case 'a': 
-	case 'd': moveSpeedLeftRight = 0.0f; break;
-	case 'w': 
-	case 's': moveSpeedFrontBack = 0.0f; break;
-	case ' ': 
-	case 'c': moveSpeedUpDown = 0.0f; break;
+	case 'a': leftSpeed = 0.0f; break;
+	case 'd': rightSpeed = 0.0f; break;
+	case 'w': forwardSpeed = 0.0f; break;
+	case 's': backwardSpeed = 0.0f; break;
+	case ' ': upSpeed = 0.0f; break;
+	case 'c': downSpeed = 0.0f; break;
 	}
 }
 
 void GLUTWindow::calculatePosition() {
-	cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * moveSpeedLeftRight + moveSpeedFrontBack*cameraFront + moveSpeedUpDown*cameraUp;
+	cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * (leftSpeed + rightSpeed) + (forwardSpeed+backwardSpeed)*cameraFront + (upSpeed + downSpeed)*cameraUp;
 	glutPostRedisplay();
 }
 
 void GLUTWindow::keyStrokes() {
-	if ((moveSpeedFrontBack != 0) || (moveSpeedLeftRight != 0) || (moveSpeedUpDown != 0)) {
+	if (((forwardSpeed + backwardSpeed) != 0) || ((leftSpeed + rightSpeed) != 0) || ((upSpeed + downSpeed) != 0)) {
 		calculatePosition();
 	}
 	if (firstRender) {
@@ -191,10 +199,8 @@ void GLUTWindow::whereIsCursor(int state) {
 	}
 }
 
-void GLUTWindow::init() {
-	srand(time(NULL));
-	
-	terrain->generate(2000, 1, 0.4f);
+void GLUTWindow::init() {	
+	terrain->generate(3000, 1, 0.4f);
 	terrain->smoother(0);
 
 	systemDrzew->generuj(terrain);

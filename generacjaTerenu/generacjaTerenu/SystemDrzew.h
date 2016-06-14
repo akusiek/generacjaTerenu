@@ -1,6 +1,5 @@
 #pragma once
 #include "Drzewo.h"
-#include "Definicje.h"
 #include "Terrain.h"
 #include <vector>
 class SystemDrzew

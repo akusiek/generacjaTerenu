@@ -16,6 +16,7 @@ class GLUTWindow
 	std::string win_name;
 	int* argc;
 	char** argv;
+	// GLUT functions
 	static void renderScene();
 	static void changeSize(int w, int h);
 	static void keyPressed(unsigned char, int, int);
@@ -23,13 +24,10 @@ class GLUTWindow
 	static void keyStrokes();
 	static void processMouseKeys(int button, int state, int x, int y);
 	static void processMouseMovement(int x,int y);
-	static void generateTerrain(int iterations, int, float);
-	static void renderTerrain(unsigned int);
 	static void whereIsCursor(int state);
 	static void calculatePosition();
-	static void smootherTerrain(unsigned int);
 	
-	//Camera
+	//Camera arguments
 	static glm::vec3 cameraPos; 
 	static glm::vec3 cameraFront;
 	static glm::vec3 cameraUp;
@@ -37,13 +35,16 @@ class GLUTWindow
 	static bool isFirstMouse, firstRender;
 	static float lastX, lastY;
 	static float yaw, pitch;
-	
-	static float moveSpeedFrontBack;
-	static float moveSpeedLeftRight;
-	static float moveSpeedUpDown;
 
+	static float forwardSpeed;
+	static float backwardSpeed;
+	static float leftSpeed;
+	static float rightSpeed;
+	static float upSpeed;
+	static float downSpeed;
+
+	// Objects
 	static Terrain* terrain;
-
 	static Lights * lights;
 	static OperacjeNaWektorach * operacjeNaWektorach;
 	static SystemDrzew * systemDrzew;
