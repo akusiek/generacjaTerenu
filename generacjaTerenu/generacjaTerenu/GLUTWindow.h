@@ -1,15 +1,12 @@
 #pragma once
 #include <string>
 #include <GL/freeglut.h>
-#include <ctime>
 #include <iostream>
 #include "glm.hpp"
 #include "Lights.h"
 #include "OperacjeNaWektorach.h"
 #include "SystemDrzew.h"
-#include "Definicje.h"
-
-//#define terrain_size 50
+#include "Terrain.h"
 
 class GLUTWindow
 {
@@ -19,10 +16,8 @@ class GLUTWindow
 	std::string win_name;
 	int* argc;
 	char** argv;
-	//static float smooth_factor;
 	static void renderScene();
 	static void changeSize(int w, int h);
-	//static void processKeys(unsigned char key, int x, int y);
 	static void keyPressed(unsigned char, int, int);
 	static void keyReleased(unsigned char, int, int);
 	static void keyStrokes();
@@ -33,7 +28,8 @@ class GLUTWindow
 	static void whereIsCursor(int state);
 	static void calculatePosition();
 	static void smootherTerrain(unsigned int);
-	//new stuff
+	
+	//Camera
 	static glm::vec3 cameraPos; 
 	static glm::vec3 cameraFront;
 	static glm::vec3 cameraUp;
@@ -45,9 +41,8 @@ class GLUTWindow
 	static float moveSpeedFrontBack;
 	static float moveSpeedLeftRight;
 	static float moveSpeedUpDown;
-	//terrain
-	static float terrain[terrain_size][terrain_size];
-	static void printTerrain();
+
+	static Terrain* terrain;
 
 	static Lights * lights;
 	static OperacjeNaWektorach * operacjeNaWektorach;
@@ -58,4 +53,3 @@ public:
 	void init();
 	~GLUTWindow();
 };
-

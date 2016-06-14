@@ -137,6 +137,7 @@
     <ClCompile Include="OperacjeNaWektorach.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SystemDrzew.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="OknoOpenGL.h" />
     <ClInclude Include="OperacjeNaWektorach.h" />
     <ClInclude Include="SystemDrzew.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
