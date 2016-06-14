@@ -168,7 +168,7 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 	case 1: // TODO: terrain rendering with triangle usage 
 		for (int x = 0; x < terrain_size - 1; ++x) {
 			for (int z = 0; z < terrain_size - 1; ++z) {
-				glColor3f(0.5f, 0.5f, 0.5f);
+				glColor3f(0.1f, 0.6f, 0.0f);
 				glBegin(GL_TRIANGLES);
 
 				float vector1[3] = { (GLfloat)x*0.1f, (GLfloat)terrain[x][z] * 0.1f, (GLfloat)z*0.1f };
@@ -240,7 +240,7 @@ void GLUTWindow::renderScene() {
 	glShadeModel(GL_SMOOTH);
 	glColor3f(0.5f, 0.5f, 0.5f);
 	renderTerrain(1);
-	glColor3f(0.5, 0.25, 0);
+	glColor3f(0.5, 0.1, 0.1);
 	glShadeModel(GL_FLAT);
 	systemDrzew->Rysuj();
 	glutSwapBuffers();
@@ -397,11 +397,11 @@ void GLUTWindow::init() {
 	//srand(0);
 	//for (int i = 0; i < 100; i++)
 
-	generateTerrain(1000, 1, 0.4f);
-
+	generateTerrain(2000, 1, 0.4f);
 	smootherTerrain(0);
+	
 	systemDrzew->generuj(terrain);
-	printTerrain();
+	//printTerrain();
 
 	glutInit(argc, argv);
 	glutInitDisplayMode(displ_mod);

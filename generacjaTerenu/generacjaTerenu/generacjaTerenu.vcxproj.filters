@@ -83,11 +83,11 @@
     <ClInclude Include="SystemDrzew.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Definicje.h">
-	<Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
-	<Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Definicje.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
