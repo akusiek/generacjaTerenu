@@ -170,14 +170,26 @@ void GLUTWindow::renderTerrain(unsigned int mode) {
 			for (int z = 0; z < terrain_size - 1; ++z) {
 				glColor3f(0.5f, 0.5f, 0.5f);
 				glBegin(GL_TRIANGLES);
-				glVertex3f((GLfloat)x*0.1f, (GLfloat)terrain[x][z] * 0.1f, (GLfloat)z*0.1f);
-				glVertex3f((GLfloat)x*0.1f, (GLfloat)terrain[x][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f);
-				glVertex3f((GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f);
-				glEnd();
-				glBegin(GL_TRIANGLES);
-				glVertex3f((GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f);
-				glVertex3f((GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z] * 0.1f, (GLfloat)z*0.1f);
-				glVertex3f((GLfloat)x*0.1f, (GLfloat)terrain[x][z] * 0.1f, (GLfloat)z*0.1f);
+
+				float vector1[3] = { (GLfloat)x*0.1f, (GLfloat)terrain[x][z] * 0.1f, (GLfloat)z*0.1f };
+				float vector2[3] = { (GLfloat)x*0.1f, (GLfloat)terrain[x][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f };
+				float vector3[3] = { (GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f };
+				float vector4[3] = { (GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z + 1] * 0.1f, (GLfloat)(z + 1)*0.1f };
+				float vector5[3] = { (GLfloat)(x + 1)*0.1f, (GLfloat)terrain[x + 1][z] * 0.1f, (GLfloat)z*0.1f };
+				float vector6[3] = { (GLfloat)x*0.1f, (GLfloat)terrain[x][z] * 0.1f, (GLfloat)z*0.1f };
+				float wynik[3];
+				glNormal3fv(operacjeNaWektorach->jednostkowyWektorNormalny3fv(vector1, vector2, vector3, wynik));
+				glVertex3fv(vector1);
+
+				glVertex3fv(vector3);
+				glVertex3fv(vector2);
+				float wynik2[3];
+				glNormal3fv(operacjeNaWektorach->jednostkowyWektorNormalny3fv(vector4, vector5, vector6, wynik2));
+				glVertex3fv(vector4);
+
+				glVertex3fv(vector6);
+				glVertex3fv(vector5);
+
 				glEnd();
 			}
 		}
@@ -227,8 +239,9 @@ void GLUTWindow::renderScene() {
 	//glEnd();
 	glShadeModel(GL_SMOOTH);
 	glColor3f(0.5f, 0.5f, 0.5f);
-	renderTerrain(2);
+	renderTerrain(1);
 	glColor3f(0.5, 0.25, 0);
+	glShadeModel(GL_FLAT);
 	systemDrzew->Rysuj();
 	glutSwapBuffers();
 }
@@ -383,7 +396,9 @@ void GLUTWindow::init() {
 	srand(time(NULL));
 	//srand(0);
 	//for (int i = 0; i < 100; i++)
+
 	generateTerrain(1000, 1, 0.4f);
+
 	smootherTerrain(0);
 	systemDrzew->generuj(terrain);
 	printTerrain();

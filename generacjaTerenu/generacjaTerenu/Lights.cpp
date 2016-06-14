@@ -5,7 +5,7 @@
 void Lights::mlecznaZarowka(float jasnosc)
 {
 	const float kolor[4] = { jasnosc,jasnosc ,jasnosc ,1.0f };
-	const float pozycja[4] = { 5.0f,0.0f,5.0f ,1.0f };
+	const float pozycja[4] = { 5.0f,1000.0f,5.0f ,1.0f };
 	glLightfv(GL_LIGHT1, GL_POSITION, pozycja);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, kolor);
 
@@ -35,13 +35,12 @@ void Lights::obsluzOswietlenie()
 
 	glPushMatrix();
 	glLoadIdentity();
-	mlecznaZarowka(1.0f);
+	mlecznaZarowka(0.7f);
 	glPopMatrix();
 }
 
 void Lights::changBackgroundLignt(float howMuch)
 {
 	natezenie_tla += howMuch;
-	if (natezenie_tla > 2.0f)
-		natezenie_tla = 2.0f;
+
 }

@@ -165,10 +165,28 @@ Drzewo::Drzewo(float pozycjaDrzewa[3])
 			obudowa3[i][j] += pozycjaDrzewa[j];
 		}
 	}
-	
-
-
 	(*next)[0]->getNext()->push_back(new GalazOpenGL(pozycjaDrzewa, szerokoscGalezi, (*next)[0], obudowa2, obrot));
+	
+	if (rand()%100 > 70)
+	{
+
+		float obudowa4[4][3];
+		stworzObudowe(obudowa4, 0, 0.001);
+
+		float obrot4[3] = { 0, 0, 70 };
+		float zmianaPodczasObrotu[3] = { 0 , 0.07f, 0 };
+		obroc(zmianaPodczasObrotu, obudowa4, obrot4);
+		zmianaPodczasObrotu[1] -= 0.2f;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 3; j++) {
+				obudowa4[i][j] += zmianaPodczasObrotu[j];
+				obudowa4[i][j] += pozycjaDrzewa[j] + 0.2f;
+			}
+		}
+		(*next)[0]->getNext()->push_back(new GalazOpenGL(pozycjaDrzewa, 0.001f, pien, obudowa4, obrot));
+
+	}
+
 
 	generujDrzewo(0.4f, 4, (*(*next)[0]->getNext())[0], szerokoscGalezi);
 }
