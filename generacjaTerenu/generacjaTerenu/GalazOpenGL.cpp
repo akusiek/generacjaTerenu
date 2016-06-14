@@ -18,6 +18,7 @@ GalazOpenGL::~GalazOpenGL()
 
 void GalazOpenGL::Rysuj()
 {
+	glPushMatrix();
 	glFrontFace(GL_CCW);
 	glCullFace(GL_FRONT_AND_BACK);
 	glBegin(GL_QUADS);
@@ -58,10 +59,10 @@ void GalazOpenGL::Rysuj()
 		glVertex3fv(prev->getObudowaPoint(2));
 		glVertex3fv(prev->getObudowaPoint(3));
 	}
-	for (int i = 0; i < next.size(); i++)
-	{
+	for (int i = 0; i < next.size(); i++){
 		next[i]->Rysuj();
 	}
 
 	glEnd();
+	glPushMatrix();
 }
